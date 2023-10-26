@@ -1,0 +1,65 @@
+{% load static %}
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   
+    <!-- FAVICON -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images_ex/fav.png'%}" />
+
+    <!-- TITLE -->
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet" />
+
+    <!-- STYLE CSS -->
+    <link href="{% static 'assets/css/style.css'%}" rel="stylesheet" />
+	
+    <link href="{% static 'assets/css/style-custom.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/dark-style.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/transparent-style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/skin-modes.css' %}" rel="stylesheet" />
+
+    <!--- FONT-ICONS CSS -->
+    <link href="{% static 'assets/css/icons.css' %}" rel="stylesheet" />
+
+    <!-- COLOR SKIN CSS -->
+    <link id="theme" rel="stylesheet" type="text/css" media="all" href="{% static 'assets/colors/color1.css' %}" />
+
+</head>
+
+<body class="app sidebar-mini ltr login-img">
+
+{% block body %}{% endblock %}
+   <!-- JQUERY JS -->
+   <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+
+   <!-- BOOTSTRAP JS -->
+   <script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+   <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+
+   <!-- SHOW PASSWORD JS -->
+   <script src="{% static 'assets/js/show-password.min.js' %}"></script>
+
+   <!-- GENERATE OTP JS -->
+   <script src="{% static 'assets/js/generate-otp.js' %}"></script>
+
+   <!-- Perfect SCROLLBAR JS-->
+   <script src="{% static 'assets/plugins/p-scroll/perfect-scrollbar.js' %}"></script>
+
+   <!-- Color Theme js -->
+   <script src="{% static 'assets/js/themeColors.js' %}"></script>
+
+   <!-- CUSTOM JS -->
+   <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+</body>
+
+</html>

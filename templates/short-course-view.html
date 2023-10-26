@@ -1,0 +1,354 @@
+{% extends "base.html" %} {% block title %} Join IT Tech Admin | Short Terms
+Course View {%endblock title %} {% block body%}
+<!--app-content open-->
+<div>{% include "header.html" %}</div>
+<div class="main-content app-content mt-0" id="course-list">
+  <div class="side-app">
+    <!-- CONTAINER -->
+    <div class="main-container container-fluid">
+      <!-- PAGE-HEADER -->
+      <div class="page-header">
+        <h1 class="page-title">Short Term Course View</h1>
+        <a href="{%url 'short_course_create'%}" class="btn btn-danger btn-pill">Add <i class="fa fa-plus"></i></a>
+      </div>
+      <!-- PAGE-HEADER END -->
+
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Short Term Course Table</h3>
+            </div>
+            <form id="search-form">
+              <input type="text" id="search-input" name="q" placeholder="Search Courses">
+              <button type="submit">Search</button>
+          </form>
+          
+          
+            <div class="card-body">
+              <div class="table-responsive">
+                <div class="table-responsive">
+                  <table class="table border text-nowrap text-md-nowrap table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Sl No</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Subtitle</th>
+                        <th>Description</th>
+                        <th>Details</th>
+
+                        <th>Satus</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- TABLE DETAILS -->
+                      {% for course in courses %}
+                      <tr  >
+                        <td>{{course.id}}</td>
+                        <td>
+                          <img class="d-block img-fluid br-5 img-td" src="{{course.image.url}}" alt="" />
+                        </td>
+                        <td>{{course.title}}</td>
+                        <td>{{course.subtitle}}</td>
+
+                        <td>
+                          <a class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#description{{forloop.counter}}">
+                            <i class="side-menu__icon fe fe-eye text-white"></i>
+                          </a>
+                          <!-- MESSAGE MODAL -->
+                          <div class="modal fade" id="description{{forloop.counter}}" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  <button aria-label="Close" class="btn-close position-absolute"
+                                    data-bs-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+
+                                  <h4 class="text-primary">Description</h4>
+                                  <p class="mg-b-20 d-flex flex-wrap mg-x-20 mx-1">
+                                    {{ course.description }}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <a class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#crsdetail{{forloop.counter}}">
+                            <i class="side-menu__icon fe fe-list text-white"></i>
+                          </a>
+                          <!-- Course Detail  MODAL -->
+                          <div class="modal fade" id="crsdetail{{forloop.counter}}" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-lg modal-dialog-centered text-center" role="document">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  <button aria-label="Close" class="btn-close position-absolute"
+                                    data-bs-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+
+                                  <table class="table table-striped">
+                                    <thead>
+                                      <tr>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>{{course.title}}</td>
+                                        <td>
+                                          {{course.description}}
+                                        </td>
+                                      </tr>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer justify-content-center">
+                  <button aria-label="Close" class="btn btn-danger pd-x-25" data-bs-dismiss="modal">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          </td>
+          <td>
+            {% if course.status == 'enable' %}
+            <span class="btn btn-success">Active</span>
+            {% else %}
+            <span class="btn btn-danger">Inactive</span>
+            {% endif %}
+          </td>
+          <td>
+            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modaledit{{forloop.counter}}">
+              <i class="side-menu__icon fe fe-edit"></i>
+            </button>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="modaledit{{forloop.counter}}" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <button aria-label="Close" class="btn-close position-absolute" data-bs-dismiss="modal">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form method="POST" action="{%url 'short_course_edit' course.id%}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="row">
+                        <!-- IMAGE UPLOADER -->
+                        <div class="">
+                        
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Image Upload</h3>
+                            </div>
+                            <div style="width: 100px;" class="overflow-hidden">
+                              <img class="w-100" src="{{course.image.url}} " alt="">
+                            </div>
+                            <div class=" card-body">
+                              <div class="row mb-5">
+                                <div class="col-lg-12 col-sm-12 mb-4 mb-lg-0">
+                                  <input type="file" class="dropify" data-bs-height="180" name="image" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- IMAGE UPLOADER end -->
+
+                        <!-- DETAILS START -->
+                        <div class="col-lg-8">
+                          <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title">Short Term Course Edit Information</h3>
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+
+                                <!--  Title -->
+                                <div class="col-sm-6 col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label"> Title</label>
+                                    <input type="text" class="form-control" placeholder=" Title" name="title"
+                                      value={{course.title}}>
+                                  </div>
+                                </div>
+                                <!--  Subtitle -->
+                                <div class="col-sm-6 col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">Subtitle</label>
+                                    <input type="text" class="form-control" placeholder="Subtitle" name="subtitle"
+                                      value={{course.subtitle}}>
+                                  </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="form-group">
+                                  <div class="multi-field-wrapper ">
+                                    <div class="multi-fields">
+                                      <div class="multi-field">
+                                        <div class="row">
+                                          <div class="col-lg-6" style="padding-right:0px">
+                                            <div class="form-group">
+                                              <label>Amount</label>
+                                              <input type="number" class="form-control form-control-lg"
+                                                placeholder="Value" name="amount" value={{course.amount}}>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-lg-6" style="padding-right:0px">
+                                            <div class="form-group">
+                                              <label>Description</label>
+
+                                              <textarea class="form-control mb-4" placeholder="Textarea"
+                                                name="description">{{ course.description }}</textarea>
+                                            </div>
+                                          </div>
+
+                                        </div>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- status -->
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-control select2" data-placeholder="Status" name="status">
+                                      <option value="enable">Enable</option>
+                                      <option value="disable">Disable</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <!-- SUBMIT START -->
+                                <div class="col-lg-12 ">
+                                  <div class="mt-5">
+                                    <a href="" class="btn btn-default btn-pill">Cancel</a>
+                                    <button type="submit" class="btn btn-warning btn-pill">Submit</button>
+                                  </div>
+                                </div>
+                                <!-- SUBMIT END -->
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- DETAILS END -->
+
+
+                      </div>
+
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+          <!-- Delete Modal-->
+        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldemo5{{forloop.counter}}">
+          <i class="side-menu__icon fe fe-trash text-white"></i>
+        </a>
+        <div class="modal fade" id="modaldemo5{{forloop.counter}}" tabindex="-1" role="dialog">
+         <form action="{%url 'short_course_delete' course.id%}" method="POST">
+          {% csrf_token %}
+          <div class="modal-dialog modal-md modal-dialog-centered text-center" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <button aria-label="Close" class="btn-close position-absolute" data-bs-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <i class="icon icon-close fs-70 text-danger lh-1 my-5 d-inline-block"></i>
+                <h4 class="text-danger">Are You Sure Do You Want To Delete {{course.title}}?</h4>
+                <p class="mg-b-20 mg-x-20">Item Will be Deleted Permanently</p>
+              </div>
+              <div class="modal-footer justify-content-center">
+                <button type="submit" class="btn btn-success">Yes</button>
+                <button aria-label="Close" class="btn btn-danger pd-x-25" data-bs-dismiss="modal">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+         </form>
+        </div>
+        </td>
+        </tr>
+        {% endfor %}
+        <!-- TABLE DETAILS END -->
+        </tbody>
+        </table>
+      </div>
+      <div class="card-body">
+        <ul class="pagination">
+            {% if courses.has_previous %}
+                <li class="page-item page-prev">
+                    <a class="page-link" href="?page={{ courses.previous_page_number }}" tabindex="-1">Prev</a>
+                </li>
+            {% else %}
+                <li class="page-item page-prev disable">
+                    <a class="page-link disable" tabindex="-1">Prev</a>
+                </li>
+            {% endif %}
+            {% for j in courses.paginator.page_range %}
+                <li class="page-item">
+                    {% if courses.number == j %}
+                        <span class="page-link active">{{ j }}</span>
+                    {% else %}
+                        <a class="page-link" href="?page={{ j }}">{{ j }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            {% if courses.has_next %}
+                <li class="page-item page-next">
+                    <a class="page-link" href="?page={{ courses.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item page-next disable">
+                    <span class="page-link disable">Next</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!-- CONTAINER END -->
+</div>
+</div>
+<!--app-content close-->
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#search-form').on('submit', function(e) {
+            e.preventDefault();
+            var query = $('#search-input').val();
+
+            $.ajax({
+                type: 'GET',
+                url: '{% url "short_course_view" %}',
+                data: { q: query },
+                success: function(data) {
+                    $('#course-list').html(data);
+                }
+            });
+        });
+    });
+</script>
+
+
+{% include "footer.html" %} {% endblock %}

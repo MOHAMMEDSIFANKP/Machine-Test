@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %} Join IT Tech Admin | Login {% endblock title %} 
+{% block body%}
+<!-- BACKGROUND-IMAGE -->
+<div class="">
+
+  <!-- PAGE -->
+  <div class="page">
+    <div class="">
+      <!-- CONTAINER OPEN -->
+
+      <div class="container-login100">
+        <div class="wrap-login100 p-6">
+          <div class="col col-login mx-auto m-5">
+            <div class="text-center">
+              <a 
+                ><img
+                  src="assets/images_ex/logo.png"
+                  class="header-brand-img"
+                  alt=""
+              /></a>
+            </div>
+          </div>
+
+          <form class="login100-form validate-form" method="post" action="{%url 'UserAuth'%}">
+            {% csrf_token %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="text-center text-danger">
+            <strong>{{message}}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div
+              class="wrap-input100 validate-input input-group"
+              data-bs-validate="Valid email is required: ex@abc.xyz"
+            >
+              <a
+                href="javascript:void(0)"
+                class="input-group-text bg-white text-muted"
+              >
+                <i class="zmdi zmdi-email text-white" aria-hidden="true"></i>
+              </a>
+              <input
+                class="input100 border-start-0 form-control ms-0"
+                type="email"
+                placeholder="Email"
+                name = 'email'
+              />
+            </div>
+            <div
+              class="wrap-input100 validate-input input-group"
+              id="Password-toggle"
+            >
+              <a
+                href="javascript:void(0)"
+                class="input-group-text bg-white text-muted"
+              >
+                <i class="zmdi zmdi-eye text-white" aria-hidden="true"></i>
+              </a>
+              <input
+                class="input100 border-start-0 form-control ms-0"
+                type="password"
+                placeholder="Password"
+                name='password'
+              />
+            </div>
+
+            <button type="submit" class="container-login100-form-btn">
+              <p class="login100-form-btn btn-primary">
+                Login
+              </p>
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- CONTAINER CLOSED -->
+    </div>
+  </div>
+  <!-- End PAGE -->
+</div>
+<!-- BACKGROUND-IMAGE CLOSED -->
+{% endblock %}
