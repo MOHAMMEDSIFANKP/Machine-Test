@@ -5,8 +5,12 @@ from django.views.decorators.cache import cache_control
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.paginator import Paginator
 from django.db.models import Q
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 from django.views import View
 from .models import *
 
@@ -118,77 +122,40 @@ class short_course_view(View):
         }
         return render(request, self.template_name, context)
     
-    
+
 # Short course Creations
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='UserAuth')
-def short_course_create(request):
-    if request.method == 'POST':
-        image = request.FILES.get('image', None)
-        title = request.POST.get('title')
-        subtitle = request.POST.get('subtitle')
-        amount = request.POST.get('amount')
-        description = request.POST.get('description')
-        status = request.POST.get('status')
-        if not title.strip() or not subtitle.strip() or not amount.strip()  or not description.strip() or not status.strip():
-            messages.error(request, "Fields can't be blank")
-            return redirect('short_course_create')
-        if not image:
-            messages.error(request, 'Image not upload')
-            return redirect('short_course_create')
-        ShortTermCourse.objects.create(image=image,title=title,amount=amount,subtitle=subtitle,description=description,status=status)
-        return redirect('short_course_view') 
-    return render(request, 'short-course-create.html')
+class short_course_create(LoginRequiredMixin, CreateView):
+    model = ShortTermCourse
+    template_name = 'short-course-create.html'
+    fields = '__all__'
+    success_url = reverse_lazy('short_course_view')
 
-
+    def form_valid(self, form):
+        messages.success(self.request, 'Short Cource created successfully')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Please fill in all required fields.')
+        return super().form_invalid(form)
+    
 # Short Course Edit
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='UserAuth')
-def short_course_edit(request,id):
-    if request.method == 'POST':
-        image = request.FILES.get('image', None)
-        title = request.POST.get('title')
-        subtitle = request.POST.get('subtitle')
-        amount = request.POST.get('amount')
-        description = request.POST.get('description')
-        status = request.POST.get('status')
-  
-        try:
-            shortem_cource = ShortTermCourse.objects.get(id=id)
-            if image:
-                shortem_cource.image = image
-                shortem_cource.save()
-            if title:
-                shortem_cource.title = title
-                shortem_cource.save()
-            if subtitle:
-                shortem_cource.subtitle = subtitle
-                shortem_cource.save()
-            if amount:
-                shortem_cource.amount = amount
-                shortem_cource.save()
-            if description:
-                shortem_cource.description = description
-                shortem_cource.save()
-            if status:
-                shortem_cource.status = status
-                shortem_cource.save()
-            messages.error(request, 'Edited successfully')
-            return redirect('short_course_view') 
-        except:
-            messages.error(request, 'Somethink wrong')
-            return redirect('short_course_view') 
+class short_course_edit(LoginRequiredMixin,UpdateView):
+    model = ShortTermCourse
+    template_name = 'short-course-create.html'
+    fields = '__all__'
+    success_url = reverse_lazy('short_course_view')
 
-        return redirect('short_course_view') 
-    return redirect('short_course_view') 
+    def form_valid(self, form):
+        messages.success(self.request, 'Short Cource created successfully')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Please fill in all required fields.')
+        return super().form_invalid(form)
 
 # Delete Short course
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='UserAuth')
-def short_course_delete(request,id):
-    try:
-        shortem_cource = ShortTermCourse.objects.get(id=id)
-        shortem_cource.delete()
-        return redirect('short_course_view') 
-    except:
-        return redirect('short_course_view')  
+class short_course_delete(LoginRequiredMixin,DeleteView):
+    model = ShortTermCourse
+    template_name = 'short-course-create.html'
+    fields = '__all__'
+    success_url = reverse_lazy('short_course_view')
